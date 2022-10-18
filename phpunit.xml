@@ -14,7 +14,7 @@
          verbose="true">
 
     <testsuites>
-        <testsuite>
+        <testsuite name="default">
             <directory>tests/Suite</directory>
         </testsuite>
     </testsuites>
