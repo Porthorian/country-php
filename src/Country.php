@@ -83,6 +83,11 @@ class Country
 		return $this->continent;
 	}
 
+	public function getContinentCode() : string
+	{
+		return CountryFactory::getIsoContinentCode($this->getContinent());
+	}
+
 	public function getSubRegionCode() : string
 	{
 		return $this->sub_region_code;

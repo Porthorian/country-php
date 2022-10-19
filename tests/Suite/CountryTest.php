@@ -44,5 +44,6 @@ class CountryTest extends TestCase
 		$this->assertFalse($country->isLeastDevelopedCountry());
 		$this->assertFalse($country->isLandLockedDevelopingCountry());
 		$this->assertFalse($country->isSmallIslandDevelopingState());
+		$this->assertEquals('NA', $country->getContinentCode());
 	}
 }
