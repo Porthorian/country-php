@@ -1,2 +1,93 @@
 <?php declare(strict_types=1);
 
+// TODO Add arguments
+
+$context = curl_init('https://unstats.un.org/unsd/methodology/m49/overview');
+curl_setopt_array($context, [
+	CURLOPT_RETURNTRANSFER => 1
+]);
+
+$result = curl_exec($context);
+$info = curl_getinfo($context);
+curl_close($context);
+
+if ($info['http_code'] != 200)
+{
+	var_dump($result);
+	throw new Exception('Invalid response given was expecting 200.');
+}
+
+$dom = new DomDocument();
+@$dom->loadHTML($result);
+
+$xpath = new DOMXPath($dom);
+
+$list = $xpath->query("//table[@id='downloadTableEN']");
+
+if (!($list instanceof DOMNodeList))
+{
+	var_dump($result);
+	throw new Exception('Failed to get english table from result set.');
+}
+
+if ($list->count() != 1)
+{
+	var_dump($result);
+	throw new Exception('Failed to find an english table from result.');
+}
+
+$table = $list->item(0);
+
+$headers = [];
+foreach ($xpath->query('thead/tr/td', $table) as $column)
+{
+	$headers[] = $column->textContent;
+}
+
+$rows = [];
+foreach ($xpath->query('tbody/tr', $table) as $row)
+{
+	$temp_row = [];
+	foreach ($xpath->query('td', $row) as $key => $column)
+	{
+		$temp_row[$headers[$key]] = trim($column->textContent);
+	}
+
+	$continent = $temp_row['Region Name'];
+	if ($continent === 'Americas' && (
+		in_array($temp_row['Sub-region Name'], ['Northern America'])
+		|| in_array($temp_row['Intermediate Region Name'], ['Central America', 'Caribbean'])))
+	{
+		$continent = 'North America';
+	}
+	else if ($continent === 'Americas' && in_array($temp_row['Intermediate Region Name'], ['South America']))
+	{
+		$continent = 'South America';
+	}
+	else if ($temp_row['ISO-alpha3 Code'] === 'ATA')
+	{
+		$continent = 'Antarctica';
+	}
+
+	$rows[] = [
+		'global_code'                      => $temp_row['Global Code'],
+		'global_name'                      => $temp_row['Global Name'],
+		'region_code'                      => $temp_row['Region Code'],
+		'region_name'                      => $temp_row['Region Name'],
+		'continent'                        => $continent,
+		'sub_region_code'                  => $temp_row['Sub-region Code'],
+		'sub_region_name'                  => $temp_row['Sub-region Name'],
+		'intermediate_region_code'         => $temp_row['Intermediate Region Code'],
+		'intermediate_region_name'         => $temp_row['Intermediate Region Name'],
+		'country_or_area'                  => $temp_row['Country or Area'],
+		'm49_code'                         => $temp_row['M49 Code'],
+		'alpha2'                           => $temp_row['ISO-alpha2 Code'],
+		'alpha3'                           => $temp_row['ISO-alpha3 Code'],
+		'least_developed_countries'        => $temp_row['Least Developed Countries (LDC)'],
+		'land_locked_developing_countries' => $temp_row['Land Locked Developing Countries (LLDC)'],
+		'small_island_developing_states'   => $temp_row['Small Island Developing States (SIDS)']
+	];
+}
+
+file_put_contents('./database/table.json', json_encode($rows, JSON_PRETTY_PRINT));
+
