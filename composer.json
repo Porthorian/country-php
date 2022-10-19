@@ -8,6 +8,11 @@
             "Porthorian\\Utility\\Country\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Porthorian\\Utility\\Country\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Vinnie Marone",
@@ -15,10 +20,15 @@
         }
     ],
     "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1",
+        "ext-json": "*"
+    },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.6",
-        "slevomat/coding-standard": "^8.5"
+        "slevomat/coding-standard": "^8.5",
+        "porthorian/utility": "^0.2.0"
     },
     "scripts": {
         "test": "vendor/bin/phpunit --no-coverage",
