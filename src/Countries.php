@@ -41,7 +41,7 @@ class Countries
 		{
 			try
 			{
-				$continent = $this->getIndex('continent')[$this->getIsoContinentCode($field_value)] ?? null;
+				$continent = $this->getIndex('continent')[CountryFactory::getIsoContinentCode($field_value)] ?? null;
 			}
 			catch (CountryException)
 			{
@@ -124,7 +124,7 @@ class Countries
 			$this->alpha3_index[strtolower($content['alpha3'])] = $key;
 			$this->m49_index[strtolower($content['m49_code'])] = $key;
 
-			$continent_code = $this->getIsoContinentCode($content['continent']);
+			$continent_code = CountryFactory::getIsoContinentCode($content['continent']);
 			if (!isset($this->continents_index[$continent_code]))
 			{
 				$this->continents_index[$continent_code] = [];
@@ -132,34 +132,5 @@ class Countries
 
 			$this->continents_index[$continent_code][] = $key;
 		}
-	}
-
-	private function getIsoContinentCode(string $continent) : string
-	{
-		switch (strtolower($continent))
-		{
-			case 'north america':
-			return 'NA';
-
-			case 'south america':
-			return 'SA';
-
-			case 'oceania':
-			return 'OC';
-
-			case 'asia':
-			return 'AS';
-
-			case 'africa':
-			return 'AF';
-
-			case 'europe':
-			return 'EU';
-
-			case 'antarctica':
-			return 'AN';
-		}
-
-		throw new CountryException('Invalid continent given unable to convert to continent code. Continent: '.$continent);
 	}
 }
