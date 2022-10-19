@@ -2,7 +2,9 @@
 
 namespace Porthorian\Utility\Country;
 
-class DriverException extends CountryException
+use Exception;
+
+class CountryException extends Exception
 {
-	//
+
 }

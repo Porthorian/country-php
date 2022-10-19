@@ -34,32 +34,59 @@ class Countries
 		return $this->find('m49_code', strtolower($m49_code));
 	}
 
-	public function getByContinents(string $field_value) : array
+	public function getByContinent(string $field_value) : ?array
 	{
+		$continent = $this->getIndex('continent')[strtoupper($field_value)] ?? null;
+		if ($continent === null)
+		{
+			try
+			{
+				$continent = $this->getIndex('continent')[$this->getIsoContinentCode($field_value)] ?? null;
+			}
+			catch (CountryException)
+			{
+				return null;
+			}
+		}
 
+		$countries = [];
+		foreach ($continent as $country_index)
+		{
+			$countries[] = new Country(...$this->index[$country_index]);
+		}
+		return $countries;
+	}
+
+	public function findAll(string $field_name, string $field_value) : array
+	{
+		if ($this->index === null)
+		{
+			$this->buildIndex();
+		}
+
+		$field_name = strtolower($field_name);
+		$countries = [];
+		foreach ($this->index as $attributes)
+		{
+			if (!isset($attributes[$field_name]))
+			{
+				throw new CountryException('Invalid field name being searched.');
+			}
+
+			if (stripos($attributes[$field_name], $field_value) !== false)
+			{
+				$countries[] = new Country(...$attributes);
+			}
+		}
+
+		return $countries;
 	}
 
 	protected function find(string $field_name, string $field_value) : ?Country
 	{
 		$index_array = $this->getIndex($field_name);
-		if ($index_array !== null)
-		{
-			return isset($this->index[$index_array[$field_value] ?? null]) ? new Country(...$this->index[$index_array[$field_value]]) : null;
-		}
 
-		foreach ($this->index as $attributes)
-		{
-			if (!isset($attributes[$field_name]))
-			{
-				throw new Exception('Invalid field name being searched.');
-			}
-
-			if ($attributes[$field_name] === $field_value)
-			{
-				return new Country(...$attributes);
-			}
-		}
-		return null;
+		return isset($this->index[$index_array[$field_value] ?? null]) ? new Country(...$this->index[$index_array[$field_value]]) : null;
 	}
 
 	private function getIndex(string $field_name) : ?array
@@ -97,13 +124,42 @@ class Countries
 			$this->alpha3_index[strtolower($content['alpha3'])] = $key;
 			$this->m49_index[strtolower($content['m49_code'])] = $key;
 
-			$lowered_continent = strtolower($content['continent']);
-			if (!isset($this->continents_index[$lowered_continent]))
+			$continent_code = $this->getIsoContinentCode($content['continent']);
+			if (!isset($this->continents_index[$continent_code]))
 			{
-				$this->continents_index[$lowered_continent] = [];
+				$this->continents_index[$continent_code] = [];
 			}
 
-			$this->continents_index[$lowered_continent][] = $key;
+			$this->continents_index[$continent_code][] = $key;
 		}
+	}
+
+	private function getIsoContinentCode(string $continent) : string
+	{
+		switch (strtolower($continent))
+		{
+			case 'north america':
+			return 'NA';
+
+			case 'south america':
+			return 'SA';
+
+			case 'oceania':
+			return 'OC';
+
+			case 'asia':
+			return 'AS';
+
+			case 'africa':
+			return 'AF';
+
+			case 'europe':
+			return 'EU';
+
+			case 'antarctica':
+			return 'AN';
+		}
+
+		throw new CountryException('Invalid continent given unable to convert to continent code. Continent: '.$continent);
 	}
 }
