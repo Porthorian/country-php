@@ -2,6 +2,8 @@
 
 // TODO Add arguments
 
+$base_dir = __DIR__.'/../iso3166';
+
 $context = curl_init('https://unstats.un.org/unsd/methodology/m49/overview');
 curl_setopt_array($context, [
 	CURLOPT_RETURNTRANSFER => 1
@@ -89,5 +91,9 @@ foreach ($xpath->query('tbody/tr', $table) as $row)
 	];
 }
 
-file_put_contents('./database/table.json', json_encode($rows, JSON_PRETTY_PRINT));
+if (!is_dir($base_dir))
+{
+	mkdir($base_dir, 0777, true);
+}
+file_put_contents($base_dir.'/table.json', json_encode($rows, JSON_PRETTY_PRINT));
 
