@@ -1,5 +1,5 @@
 {
-    "name": "porthorian/isocountry",
+    "name": "porthorian/iso_country",
     "description": "ISO 3166 lookup for continents and country codes, based on UN stats.",
     "type": "library",
     "license": "MIT",
