@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Porthorian\Utility\Country\Tests\Suite;
+namespace Porthorian\IsoCountry\Tests\Suite;
 
 use PHPUnit\Framework\TestCase;
-use Porthorian\Utility\Country\Country;
+use Porthorian\IsoCountry\Country;
 use Porthorian\Utility\String\StringUtility;
 
 class CountryTest extends TestCase

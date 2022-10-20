@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Porthorian\Utility\Country;
+namespace Porthorian\IsoCountry;
 
 use Exception;
 

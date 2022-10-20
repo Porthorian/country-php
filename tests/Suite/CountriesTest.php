@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Porthorian\Utility\Country\Tests\Suite;
+namespace Porthorian\IsoCountry\Tests\Suite;
 
 use PHPUnit\Framework\TestCase;
-use Porthorian\Utility\Country\CountryException;
-use Porthorian\Utility\Country\Countries;
-use Porthorian\Utility\Country\Country;
-use Porthorian\Utility\Country\Tests\DummyDriver;
+use Porthorian\IsoCountry\CountryException;
+use Porthorian\IsoCountry\Countries;
+use Porthorian\IsoCountry\Country;
+use Porthorian\IsoCountry\Tests\DummyDriver;
 
 class CountriesTest extends TestCase
 {

@@ -5,12 +5,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Porthorian\\Utility\\Country\\": "src/"
+            "Porthorian\\IsoCountry\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Porthorian\\Utility\\Country\\Tests\\": "tests/"
+            "Porthorian\\IsoCountry\\Tests\\": "tests/"
         }
     },
     "authors": [

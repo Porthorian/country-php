@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Porthorian\Utility\Country\Tests;
+namespace Porthorian\IsoCountry\Tests;
 
-use Porthorian\Utility\Country\DatabaseDriverInterface;
+use Porthorian\IsoCountry\DatabaseDriverInterface;
 
 class DummyDriver implements DatabaseDriverInterface
 {
