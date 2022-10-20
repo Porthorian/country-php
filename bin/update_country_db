@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
-$base_dir = rtrim($argv[1] ?? __DIR__.'/../iso3166', '/');
-$file_name = ltrim('/', $argv[2] ?? 'table.json');
+$base_dir = rtrim(($argv[1] ?? __DIR__.'/../iso3166'), '/');
+$file_name = ltrim($argv[2] ?? 'table.json', '/');
 
 $context = curl_init('https://unstats.un.org/unsd/methodology/m49/overview');
 curl_setopt_array($context, [
