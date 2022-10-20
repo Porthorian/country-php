@@ -16,7 +16,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/app/composer.lock') }}
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
     - name: PHP Versions
       run: |
         ls /etc/php && ls /usr/bin | grep php
