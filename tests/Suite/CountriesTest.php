@@ -6,13 +6,15 @@ use PHPUnit\Framework\TestCase;
 use Porthorian\Utility\Country\CountryException;
 use Porthorian\Utility\Country\Countries;
 use Porthorian\Utility\Country\Country;
+use Porthorian\Utility\Country\CountryFactory;
+use Porthorian\Utility\Country\Tests\DummyDriver;
 
 class CountriesTest extends TestCase
 {
 	public function testGetByAlpha2()
 	{
-		$countries = new Countries();
-		$country = $countries->getByAlpha2('gb');
+		$countries = new Countries(new DummyDriver());
+		$country = $countries->getByAlpha2('us');
 		$this->assertNotNull($country);
 		$this->assertInstanceOf(Country::class, $country);
 		$this->assertNull($countries->getByAlpha2('gbsdsdsd'));
@@ -20,8 +22,8 @@ class CountriesTest extends TestCase
 
 	public function testGetByAlpha3()
 	{
-		$countries = new Countries();
-		$country = $countries->getByAlpha3('gbr');
+		$countries = new Countries(new DummyDriver());
+		$country = $countries->getByAlpha3('usa');
 		$this->assertNotNull($country);
 		$this->assertInstanceOf(Country::class, $country);
 		$this->assertNull($countries->getByAlpha3('gbrassdd'));
@@ -29,8 +31,8 @@ class CountriesTest extends TestCase
 
 	public function testGetByM49Code()
 	{
-		$countries = new Countries();
-		$country = $countries->getByM49Code('826');
+		$countries = new Countries(new DummyDriver());
+		$country = $countries->getByM49Code('840');
 		$this->assertNotNull($country);
 		$this->assertInstanceOf(Country::class, $country);
 		$this->assertNull($countries->getByM49Code('82625345345345'));
@@ -38,12 +40,13 @@ class CountriesTest extends TestCase
 
 	public function testGetByContinent()
 	{
-		$countries = new Countries();
+		$countries = new Countries(new DummyDriver());
 		foreach (['North America', 'NA'] as $search)
 		{
 			$countries_inside = $countries->getByContinent($search);
 			$this->assertNotNull($countries_inside);
 			$this->assertIsArray($countries_inside);
+			$this->assertCount(1, $countries_inside);
 			foreach ($countries_inside as $country)
 			{
 				$this->assertInstanceOf(Country::class, $country);
@@ -56,11 +59,12 @@ class CountriesTest extends TestCase
 
 	public function testFindAll()
 	{
-		$countries = new Countries();
+		$countries = new Countries(new DummyDriver());
 
-		// Find all countries with "e" in them.
-		$found_countries = $countries->findAll('country_or_area', 'e');
+		// Find all countries with "f" in them.
+		$found_countries = $countries->findAll('country_or_area', 'f');
 		$this->assertNotNull($found_countries);
+		$this->assertCount(1, $found_countries);
 		foreach ($found_countries as $country)
 		{
 			$this->assertInstanceOf(Country::class, $country);
@@ -70,6 +74,16 @@ class CountriesTest extends TestCase
 		$this->expectException(CountryException::class);
 		$this->expectExceptionMessage('Invalid field name being searched.');
 		$countries->findAll('asdasdsdfsdf', 'asdsd');
+	}
+
+	public function testIterator()
+	{
+		$countries = (new CountryFactory(new DummyDriver()))->getCountries();
+		$this->assertCount(2, $countries);
+		foreach ($countries as $country)
+		{
+			$this->assertInstanceOf(Country::class, $country);
+		}
 	}
 }
 

@@ -4,6 +4,18 @@ namespace Porthorian\Utility\Country;
 
 class CountryFactory
 {
+	private ?DatabaseDriverInterface $driver;
+
+	public function __construct(?DatabaseDriverInterface $driver = null)
+	{
+		$this->driver = $driver;
+	}
+
+	public function getCountries() : Countries
+	{
+		return new Countries($this->driver);
+	}
+
 	public static function getIsoContinentCode(string $continent) : string
 	{
 		switch (strtolower(str_replace('_', ' ', $continent)))

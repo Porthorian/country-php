@@ -2,9 +2,10 @@
 
 namespace Porthorian\Utility\Country;
 
-use Exception;
+use Iterator;
+use Countable;
 
-class Countries
+class Countries implements Iterator, Countable
 {
 	private DatabaseDriverInterface $driver;
 
@@ -132,5 +133,53 @@ class Countries
 
 			$this->continents_index[$continent_code][] = $key;
 		}
+	}
+
+	////
+	// Iterator Interface
+	////
+
+	public function current() : Country
+	{
+		return new Country(...$this->index[$this->cursor]);
+	}
+
+	public function key() : int
+	{
+		return $this->cursor;
+	}
+
+	public function next() : void
+	{
+		$this->cursor++;
+	}
+
+	public function valid() : bool
+	{
+		return $this->cursor < $this->count();
+	}
+
+	public function rewind() : void
+	{
+		if ($this->index === null)
+		{
+			$this->buildIndex();
+		}
+
+		$this->cursor = 0;
+	}
+
+	////
+	// Countable Interface
+	////
+
+	public function count() : int
+	{
+		if ($this->index === null)
+		{
+			$this->buildIndex();
+		}
+
+		return count($this->index);
 	}
 }
