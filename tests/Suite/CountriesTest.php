@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Porthorian\Utility\Country\Tests;
+namespace Porthorian\Utility\Country\Tests\Suite;
 
 use PHPUnit\Framework\TestCase;
 use Porthorian\Utility\Country\CountryException;
@@ -78,11 +78,13 @@ class CountriesTest extends TestCase
 
 	public function testIterator()
 	{
-		$countries = (new CountryFactory(new DummyDriver()))->getCountries();
+		$countries = new Countries(new DummyDriver());
 		$this->assertCount(2, $countries);
-		foreach ($countries as $country)
+		$iterator = 0;
+		foreach ($countries as $key => $country)
 		{
 			$this->assertInstanceOf(Country::class, $country);
+			$this->assertEquals($iterator++, $key);
 		}
 	}
 }

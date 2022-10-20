@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Porthorian\Utility\Country\Tests;
+namespace Porthorian\Utility\Country\Tests\Suite;
 
 use PHPUnit\Framework\TestCase;
 use Porthorian\Utility\Country\Country;
