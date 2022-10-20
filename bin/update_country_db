@@ -1,8 +1,8 @@
+#!/usr/bin/env php
 <?php declare(strict_types=1);
 
-// TODO Add arguments
-
-$base_dir = __DIR__.'/../iso3166';
+$base_dir = rtrim($argv[1] ?? __DIR__.'/../iso3166', '/');
+$file_name = ltrim('/', $argv[2] ?? 'table.json');
 
 $context = curl_init('https://unstats.un.org/unsd/methodology/m49/overview');
 curl_setopt_array($context, [
@@ -95,5 +95,5 @@ if (!is_dir($base_dir))
 {
 	mkdir($base_dir, 0777, true);
 }
-file_put_contents($base_dir.'/table.json', json_encode($rows, JSON_PRETTY_PRINT));
+file_put_contents($base_dir.'/'.$file_name, json_encode($rows, JSON_PRETTY_PRINT));
 

@@ -30,6 +30,7 @@
         "slevomat/coding-standard": "^8.5",
         "porthorian/utility": "^0.2.0"
     },
+    "bin": ["bin/update_country_db"],
     "scripts": {
         "test": "vendor/bin/phpunit --no-coverage",
         "cover": "vendor/bin/phpunit && curl -s https://raw.githubusercontent.com/Porthorian/phpunit-code-coverage-theme/main/custom.css -o .phpunit.cache/html/_css/custom.css",
