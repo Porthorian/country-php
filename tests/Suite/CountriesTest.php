@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Porthorian\Utility\Country\CountryException;
 use Porthorian\Utility\Country\Countries;
 use Porthorian\Utility\Country\Country;
-use Porthorian\Utility\Country\CountryFactory;
 use Porthorian\Utility\Country\Tests\DummyDriver;
 
 class CountriesTest extends TestCase
